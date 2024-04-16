@@ -46,7 +46,7 @@ public class HelloApplication extends Application {
         lbUsername.setFont(Font.font(30));
         grid.add(lbUsername, 0, 1);
 
-        TextField tfUsername = new TextField();
+        TextField tfUsername = new TextField(); //textfield for username
         grid.add(tfUsername, 1, 1);
         tfUsername.setFont(Font.font(30));
 //        tfUsername.setMaxWidth(150);
@@ -56,7 +56,7 @@ public class HelloApplication extends Application {
         lbPassword.setTextFill(Color.CHARTREUSE);
         grid.add(lbPassword, 0, 2);
 
-        PasswordField pfPassword = new PasswordField();
+        PasswordField pfPassword = new PasswordField(); //textfield for password
         pfPassword.setFont(Font.font(30));
         grid.add(pfPassword, 1, 2);
 
@@ -102,18 +102,49 @@ public class HelloApplication extends Application {
         btnLogin.setFont(Font.font(40));
         grid.add(btnLogin, 0, 3, 2, 1);
 
+        Button btnRegister = new Button("Register");
+        btnRegister.setFont(Font.font(40));
+        grid.add(btnRegister, 0, 4, 2, 1);
+
         btnLogin.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 System.out.println("Hello");
-                try {
-                    Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
-                    Scene s = new Scene(p);
-                    stage.setScene(s);
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (ReadData.getUsername(tfUsername.getText())){
+                    if (ReadData.getPassword(pfPassword.getText())){
+                        try {
+                            Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
+                            Scene s = new Scene(p);
+                            stage.setScene(s);
+                            stage.show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        System.out.println("I was also called! but wrong password huehue");
+                    }
+                } else {
+                    System.out.println("I was called!\nUsername does not exists!");
                 }
+            }
+        });
+
+        btnRegister.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("hello");
+                CreateTable.createTable(); //create table if table does not exist
+                if (InsertData.insertData(tfUsername.getText(), pfPassword.getText())){
+                    try {
+                        Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
+                        Scene s = new Scene(p);
+                        stage.setScene(s);
+                        stage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         });
 
