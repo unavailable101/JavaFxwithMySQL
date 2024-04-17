@@ -23,9 +23,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+    public static int current_uid;
     @Override
     public void start(Stage stage) throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+        loginPage(stage);
+    }
+
+    public static void loginPage(Stage stage){
+        //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
 //        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
 //        stage.setTitle("Hello!");
 //        stage.setScene(scene);
@@ -112,6 +117,7 @@ public class HelloApplication extends Application {
                 System.out.println("Hello");
                 if (ReadData.getUsername(tfUsername.getText())){
                     if (ReadData.getPassword(pfPassword.getText())){
+                        System.out.println("Current user id to login: " + current_uid);
                         try {
                             Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
                             Scene s = new Scene(p);

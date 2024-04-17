@@ -1,9 +1,7 @@
 package com.example.csit228_f1_v2;
 
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 public class HomeController {
 
@@ -11,6 +9,11 @@ public class HomeController {
     public ProgressIndicator piProgress;
     public Slider slSlider;
     public ProgressBar pbProgress;
+    public Button logout;
+    public Button changePassword;
+    public Button tbChangeUsername;
+    public TextField txtUsername;
+
 
     public void onSliderChange() {
         double val = slSlider.getValue();
@@ -30,5 +33,20 @@ public class HomeController {
             tbNight.getParent().setStyle("-fx-background-color: WHITE");
             tbNight.setText("NIGHT");
         }
+    }
+
+    public void onLogout(){
+        System.out.println("Current user to logout: " + HelloApplication.current_uid);
+        HelloApplication.current_uid = -1;
+        HelloApplication.loginPage(new Stage());
+
+    }
+
+    public void onChangePassword(){
+
+    }
+
+    public void onChangeUsername(){
+
     }
 }

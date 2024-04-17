@@ -14,6 +14,8 @@ public class ReadData {
 //        this.username = null;
 //        this.password = null;
 //    }
+    private static String curr_username;
+
     public static boolean getUsername(String username) {
         try (
                 Connection c = MySQLConnection.getConnection();
@@ -25,7 +27,10 @@ public class ReadData {
                 int id = res.getInt("id");
 //                String username = res.getString("username");
 //                String password = res.getString("password");
-                if ( username.equals(res.getString("username"))) return true;
+                if ( username.equals(res.getString("username"))) {
+                    curr_username = res.getString("username");
+                    return true;
+                }
 //                System.out.println("ID: " + id + "\t\tName: " + username + "\t\tEmail: " + password);
             }
         } catch (SQLException e) {
@@ -46,7 +51,12 @@ public class ReadData {
                 int id = res.getInt("id");
 //                String username = res.getString("username");
 //                String password = res.getString("password");
-                if ( password.equals(res.getString("password"))) return true;
+                if (curr_username.equals(res.getString("username"))){
+                    if (password.equals(res.getString("password"))) {
+                        HelloApplication.current_uid = res.getInt("id");
+                        return true;
+                    }
+                }
 //                System.out.println("ID: " + id + "\t\tName: " + username + "\t\tEmail: " + password);
             }
         } catch (SQLException e) {
