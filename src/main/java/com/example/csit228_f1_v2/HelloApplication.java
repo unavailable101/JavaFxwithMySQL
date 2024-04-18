@@ -24,13 +24,15 @@ import java.io.IOException;
 
 public class HelloApplication extends Application {
     public static int current_uid;
+    public static Stage primaryStage;
+
     @Override
     public void start(Stage stage) throws IOException {
         loginPage(stage);
     }
 
     public static void loginPage(Stage stage){
-        //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
 //        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
 //        stage.setTitle("Hello!");
 //        stage.setScene(scene);
@@ -104,12 +106,12 @@ public class HelloApplication extends Application {
         grid.add(btnShow, 2,2);
 
         Button btnLogin = new Button("Log In");
-        btnLogin.setFont(Font.font(40));
+        btnLogin.setFont(Font.font(20));
         grid.add(btnLogin, 0, 3, 2, 1);
 
         Button btnRegister = new Button("Register");
-        btnRegister.setFont(Font.font(40));
-        grid.add(btnRegister, 0, 4, 2, 1);
+        btnRegister.setFont(Font.font(20));
+        grid.add(btnRegister, 1, 3, 2, 1);
 
         btnLogin.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -153,6 +155,7 @@ public class HelloApplication extends Application {
 
             }
         });
+        primaryStage = stage;
 
         Scene scene = new Scene(grid, 700, 500, Color.BLACK);
         stage.setScene(scene);

@@ -1,16 +1,14 @@
 package com.example.csit228_f1_v2;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class InsertData {
 //    public static void main(String[] args) {
     public static boolean insertData(String username, String password){
         int ctr = 0;
-        try( Connection c = MySQLConnection.getConnection();
-             PreparedStatement statement = c.prepareStatement(
-                     "INSERT INTO users (username, password) VALUES (?, ?)");
+        try(Connection c = MySQLConnection.getConnection();
+            PreparedStatement statement = c.prepareStatement(
+                     "INSERT INTO users (username, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
         ){
 //            String name = "Nina";
 //            String email = "ninz@gmail.com";
@@ -18,6 +16,11 @@ public class InsertData {
             statement.setString(2, password);
             ctr = statement.executeUpdate();
             System.out.println("Inserted " + ctr + " data successfully");
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                HelloApplication.current_uid = rs.getInt(1);
+            }
+            System.out.println("current user id: " + HelloApplication.current_uid);
 
         } catch (SQLException e){
             e.printStackTrace();
