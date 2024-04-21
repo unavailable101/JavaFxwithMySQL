@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -25,6 +26,7 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     public static int current_uid;
     public static Stage primaryStage;
+    public static Scene primaryScene;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -39,17 +41,17 @@ public class HelloApplication extends Application {
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        Text txtWelcome = new Text("Welcome to CIT");
-        txtWelcome.setFont(Font.font("Chiller", FontWeight.EXTRA_BOLD, 69));
-        txtWelcome.setFill(Color.RED);
+        Text txtWelcome = new Text("Welcome Back!");
+        txtWelcome.setFont(Font.font(69));
+//        txtWelcome.setFill(Color.RED);
 //        grid.setAlignment();
-        grid.setPadding(new Insets(20));
+        grid.setPadding(new Insets(100));
 //        grid.
         txtWelcome.setTextAlignment(TextAlignment.CENTER);
         grid.add(txtWelcome, 0, 0, 3, 1);
 
         Label lbUsername = new Label("Username: ");
-        lbUsername.setTextFill(Color.LIGHTSKYBLUE);
+//        lbUsername.setTextFill(Color.LIGHTSKYBLUE);
         lbUsername.setFont(Font.font(30));
         grid.add(lbUsername, 0, 1);
 
@@ -60,7 +62,7 @@ public class HelloApplication extends Application {
 
         Label lbPassword = new Label("Password");
         lbPassword.setFont(Font.font(30));
-        lbPassword.setTextFill(Color.CHARTREUSE);
+//        lbPassword.setTextFill(Color.CHARTREUSE);
         grid.add(lbPassword, 0, 2);
 
         PasswordField pfPassword = new PasswordField(); //textfield for password
@@ -121,7 +123,20 @@ public class HelloApplication extends Application {
                     if (ReadData.getPassword(pfPassword.getText())){
                         System.out.println("Current user id to login: " + current_uid);
                         try {
-                            Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
+//                            Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
+                            FXMLLoader load = new FXMLLoader(getClass().getResource("homepage.fxml"));
+                            Parent p = load.load();
+
+                            HomeController controller = load.getController();
+//                            load.setController(controller);
+
+                            // Pass data to HomeController if needed
+                            controller.setCurrentUser(tfUsername.getText());
+
+
+                            Label txt_username = (Label) ((AnchorPane) p).getChildren().get(5);
+                            txt_username.setText(tfUsername.getText());
+//                            HomeController.txtUsername.setText(tfUsername.getText());
                             Scene s = new Scene(p);
                             stage.setScene(s);
                             stage.show();
@@ -141,7 +156,7 @@ public class HelloApplication extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 System.out.println("hello");
-                CreateTable.createTable(); //create table if table does not exist
+                CreateTable.createUser(); //create table if table does not exist
                 if (InsertData.insertData(tfUsername.getText(), pfPassword.getText())){
                     try {
                         Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
@@ -158,6 +173,7 @@ public class HelloApplication extends Application {
         primaryStage = stage;
 
         Scene scene = new Scene(grid, 700, 500, Color.BLACK);
+        primaryScene = scene;
         stage.setScene(scene);
         scene.setFill(Color.CORNFLOWERBLUE);
         stage.show();

@@ -27,4 +27,21 @@ public class InsertData {
         }
         return (ctr > 0);
     }
+
+    public static void addNote(String title, String contents){
+        try (
+            Connection c = MySQLConnection.getConnection();
+            PreparedStatement ps = c.prepareStatement(
+              "INSERT INTO notes (uid, title, contents) VALUES (?, ?, ?)"
+            );
+        ){
+            ps.setInt(1,HelloApplication.current_uid);
+            ps.setString(2, title);
+            ps.setString(3, contents);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

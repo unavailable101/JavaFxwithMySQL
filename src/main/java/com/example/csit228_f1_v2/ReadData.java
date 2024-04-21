@@ -66,4 +66,24 @@ public class ReadData {
         return false;
     }
 
+    public static ResultSet all_notes(){
+        try{
+            Connection c = MySQLConnection.getConnection();
+            Statement s = c.createStatement();
+            String query = "SELECT * FROM notes WHERE uid="+HelloApplication.current_uid;
+            return s.executeQuery(query);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+//        finally {
+//            try{
+//                c.close();
+//                s.close();
+//                res.close();
+//            } catch (SQLException e){
+//                e.printStackTrace();
+//            }
+//        }
+        return null;
+    }
 }
