@@ -25,6 +25,7 @@ import java.io.IOException;
 
 public class HelloApplication extends Application {
     public static int current_uid;
+    public static String current_username;
     public static Stage primaryStage;
     public static Scene primaryScene;
 
@@ -121,7 +122,10 @@ public class HelloApplication extends Application {
                 System.out.println("Hello");
                 if (ReadData.getUsername(tfUsername.getText())){
                     if (ReadData.getPassword(pfPassword.getText())){
+                        current_username = tfUsername.getText();
                         System.out.println("Current user id to login: " + current_uid);
+                        pfPassword.clear();
+                        tmpPassword.clear();
                         try {
 //                            Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
                             FXMLLoader load = new FXMLLoader(getClass().getResource("homepage.fxml"));
@@ -129,13 +133,13 @@ public class HelloApplication extends Application {
 
                             HomeController controller = load.getController();
 //                            load.setController(controller);
+//                            HomeController forUname = new HomeController();
+//                            // Pass data to HomeController if needed
+////                            controller.setCurrentUser(uname);
+//                            forUname.setCurrentUser(uname);
 
-                            // Pass data to HomeController if needed
-                            controller.setCurrentUser(tfUsername.getText());
-
-
-                            Label txt_username = (Label) ((AnchorPane) p).getChildren().get(5);
-                            txt_username.setText(tfUsername.getText());
+//                            Label txt_username = (Label) ((AnchorPane) p).getChildren().get(5);
+//                            txt_username.setText(tfUsername.getText());
 //                            HomeController.txtUsername.setText(tfUsername.getText());
                             Scene s = new Scene(p);
                             stage.setScene(s);

@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,18 +37,30 @@ public class HomeController implements Initializable {
     public Label txtUsername;
     public AnchorPane home;
     @FXML
-    public Label txtTitle;
+    public Label txtTitle; //di sha mu ila nimo huehue
     public TextField tfNoteTitle;
     public Button btnCreateNote;
     public TextArea taNoteContents;
     public Button deleteAccnt;
     public AnchorPane apYourNotes;
+    @FXML
+    public Label lblUsername;
+    public Label username;
+    public Button btnDeleteAllNotes;
+    public VBox vbOutput;
+    public AnchorPane apViewNotes;
+    public TextField tfNoteTitle_view;
+    public TextArea taNoteContents_view;
+    public Button btnSaveChanges;
+    public Button btnClose_view;
+    public Button btnDelete_view;
 
-    String currentUser;
 
-    public void setCurrentUser(String username){
-        this.currentUser = username;
-    }
+//    String currentUser;
+//
+//    public void setCurrentUser(String username){
+//        currentUser = username;
+//    }
 
 
 //    public void onSliderChange() {
@@ -66,45 +79,90 @@ public class HomeController implements Initializable {
 //        txtUsername.setText("testing");
 //    }
 
+    protected URL loc;
+    protected  ResourceBundle rsbundle;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("homepage.fxml"));
 //        loader.setController(this);
-        ResultSet yourNotes = ReadData.all_notes();
-        try {
-            VBox content = new VBox();
-            while (yourNotes.next()) {
-//                System.out.println("Title: " + yourNotes.getString("title") + "\n" + "Content: " + yourNotes.getString("contents"));
-                int note_id = yourNotes.getInt("id");
-                Label note_title = new Label(yourNotes.getString("title"));
-                Button view = new Button("View");
-                Button delete_note = new Button("Delete");
-                HBox hbox = new HBox(note_title, view, delete_note);
-                content.getChildren().add(hbox);
-
-                view.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        System.out.println("view btn pressed! note_id: " + note_id);
-
-                    }
-                });
-
-                delete_note.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        System.out.println("delete btn pressed! note_id: " + note_id);
-                    }
-                });
-            }
-            apYourNotes.getChildren().addAll(content);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
+        loc = location;
+        rsbundle = resources;
+//        lblUsername.setTextFill(Color.WHITE);
+        lblUsername.setText(HelloApplication.current_username);
+//        username = (Label) home.getChildren().get(5);
+        vbOutput.getChildren().clear();
+        if (CreateTable.notesTable()) {
+            ResultSet yourNotes = ReadData.all_notes();
             try {
-                yourNotes.close();
+//                VBox content = new VBox();
+//                Insets margin = new Insets(100);
+//                VBox.setMargin(content, margin);
+                while (yourNotes.next()) {
+//                System.out.println("Title: " + yourNotes.getString("title") + "\n" + "Content: " + yourNotes.getString("contents"));
+                    int note_id = yourNotes.getInt("id");
+                    String title = yourNotes.getString("title");
+                    String contents = yourNotes.getString("contents");
+
+                    Label note_title = new Label(title);
+                    note_title.setPrefWidth(325);
+                    Button view = new Button("View");
+                    Button delete_note = new Button("Delete");
+                    HBox hbox = new HBox(note_title, view, delete_note);
+                    hbox.setSpacing(10);
+//                    HBox.setMargin(hbox, new Insets(5, 0, 5, 0));
+                    vbOutput.getChildren().add(hbox);
+                    vbOutput.setSpacing(5);
+
+                    view.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            System.out.println("view btn pressed! note_id: " + note_id);
+                            apViewNotes.setVisible(true);
+                            vbOutput.setVisible(false);
+                            tfNoteTitle_view.setText(title);
+                            taNoteContents_view.setText(contents);
+                            btnSaveChanges.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent actionEvent) {
+                                    UpdateData.updateNote(note_id, tfNoteTitle_view.getText(), taNoteContents_view.getText());
+                                    initialize(loc, rsbundle);
+                                    onCloseViewNote();
+                                }
+                            });
+
+                            btnDelete_view.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent actionEvent) {
+                                    onDeleteNote(note_id);
+                                    initialize(loc, rsbundle);
+                                    onCloseViewNote();
+                                }
+                            });
+
+
+                        }
+                    });
+
+                    delete_note.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            System.out.println("delete btn pressed! note_id: " + note_id);
+//                            DeleteData.deleteNote(note_id);
+                            onDeleteNote(note_id);
+                            initialize(loc, rsbundle);
+                        }
+                    });
+                }
+//                apYourNotes.getChildren().addAll(vbOutput);
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+            } finally {
+                try {
+                    yourNotes.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -112,12 +170,12 @@ public class HomeController implements Initializable {
     public void onNightModeClick() {
         if (tbNight.isSelected()) {
             tbNight.getParent().setStyle("-fx-background-color: WHITE");
-            txtUsername.setTextFill(Color.BLACK);
+            lblUsername.setTextFill(Color.BLACK);
             txtTitle.setTextFill(Color.BLACK);
             tbNight.setText("NIGHT");
         } else {
             tbNight.getParent().setStyle("-fx-background-color: BLACK");
-            txtUsername.setTextFill(Color.WHITE);
+            lblUsername.setTextFill(Color.WHITE);
             txtTitle.setTextFill(Color.WHITE);
             tbNight.setText("DAY");
         }
@@ -211,6 +269,8 @@ public class HomeController implements Initializable {
         if (result.isPresent()) {
             if (!result.get().equals(null)){
                 UpdateData.updateUsername(HelloApplication.current_uid, result.get());
+                HelloApplication.current_username = result.get();
+                initialize(loc, rsbundle);
             }
 //            System.out.println(result.get());
         }
@@ -255,5 +315,22 @@ public class HomeController implements Initializable {
         System.out.println(tfNoteTitle.getText() +  "\n" + taNoteContents.getText());
         CreateTable.createNote();
         InsertData.addNote(tfNoteTitle.getText(), taNoteContents.getText());
+        tfNoteTitle.clear();
+        taNoteContents.clear();
+        initialize(loc, rsbundle);
+    }
+
+    public void onDeleteAllNotes(ActionEvent actionEvent) {
+        DeleteData.deleteAllNotes(HelloApplication.current_uid);
+        initialize(loc, rsbundle);
+    }
+    public void onDeleteNote(int note_id){
+        DeleteData.deleteNote(note_id);
+        initialize(loc, rsbundle);
+    }
+
+    public void onCloseViewNote() {
+        apViewNotes.setVisible(false);
+        vbOutput.setVisible(true);
     }
 }

@@ -1,12 +1,19 @@
 package com.example.csit228_f1_v2;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class CreateTable {
 //    public static void main(String[] args) {
-
+    public static boolean notesTable(){
+        try (Connection c = MySQLConnection.getConnection()) {
+            DatabaseMetaData metaData = c.getMetaData();
+            ResultSet resultSet = metaData.getTables(null, null, "notes", null);
+            return resultSet.next(); // If next() returns true, table exists
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public static void createUser(){
         Connection c =  MySQLConnection.getConnection();
         String query = "CREATE TABLE IF NOT EXISTS users (" +
@@ -30,14 +37,16 @@ public class CreateTable {
 
     public static void createNote(){
         try (Connection c =  MySQLConnection.getConnection();) {
-            String query = "CREATE TABLE IF NOT EXISTS notes (" +
+            String query =
+                    "CREATE TABLE IF NOT EXISTS notes (" +
                     "uid INT," +
                     "id INT PRIMARY KEY AUTO_INCREMENT," +
                     "title VARCHAR(100) NOT NULL DEFAULT 'no title'," +
-                    "contents VARCHAR(4294967295), " +
-                    "FOREIGN KEY (uid) REFERENCES users(id) )";
+                    "contents TEXT (9999999), " +
+                    "FOREIGN KEY (uid) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE)";
             Statement statement = c.createStatement();
             statement.execute(query);
+//            notesTable = true;
             System.out.println("Table 'notes' has been created successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
