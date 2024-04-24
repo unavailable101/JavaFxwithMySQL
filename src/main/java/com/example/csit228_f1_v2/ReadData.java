@@ -17,12 +17,16 @@ public class ReadData {
     private static String curr_username;
 
     public static boolean getUsername(String username) {
-        try (
-                Connection c = MySQLConnection.getConnection();
-                Statement statement = c.createStatement();
-        ) {
+        Connection c = null;
+        try{
+            c = MySQLConnection.getConnection();
+            c.setAutoCommit(false);
+
+            Statement statement = c.createStatement();
+
             String query = "SELECT * FROM users";
             ResultSet res = statement.executeQuery(query);
+            c.commit();
             while (res.next()) {
                 int id = res.getInt("id");
 //                String username = res.getString("username");
@@ -34,19 +38,34 @@ public class ReadData {
 //                System.out.println("ID: " + id + "\t\tName: " + username + "\t\tEmail: " + password);
             }
         } catch (SQLException e) {
-
+            e.printStackTrace();
+            try {
+                c.rollback();
+            } catch (SQLException r){
+                r.printStackTrace();
+            }
+        } finally {
+            try {
+                c.close();
+            } catch (SQLException closeException) {
+                closeException.printStackTrace();
+            }
         }
 //    }
         return false;
     }
 
     public static boolean getPassword(String password)  {
-        try (
-                Connection c = MySQLConnection.getConnection();
-                Statement statement = c.createStatement();
-        ) {
+        Connection c = null;
+        try {
+            c = MySQLConnection.getConnection();
+            c.setAutoCommit(false);
+
+            Statement statement = c.createStatement();
+
             String query = "SELECT * FROM users";
             ResultSet res = statement.executeQuery(query);
+            c.commit();
             while (res.next()) {
                 int id = res.getInt("id");
 //                String username = res.getString("username");
@@ -60,18 +79,33 @@ public class ReadData {
 //                System.out.println("ID: " + id + "\t\tName: " + username + "\t\tEmail: " + password);
             }
         } catch (SQLException e) {
-
+            e.printStackTrace();
+            try {
+                c.rollback();
+            } catch (SQLException r){
+                r.printStackTrace();
+            }
+        } finally {
+            try {
+                c.close();
+            } catch (SQLException closeException) {
+                closeException.printStackTrace();
+            }
         }
 //    }
         return false;
     }
 
     public static ResultSet all_notes(){
+        Connection c = null;
         try{
-            Connection c = MySQLConnection.getConnection();
+            c = MySQLConnection.getConnection();
+            c.setAutoCommit(false);
             Statement s = c.createStatement();
             String query = "SELECT * FROM notes WHERE uid="+HelloApplication.current_uid;
-            return s.executeQuery(query);
+            ResultSet res =  s.executeQuery(query);
+            c.commit();
+            return res;
         } catch (SQLException e){
             e.printStackTrace();
         }

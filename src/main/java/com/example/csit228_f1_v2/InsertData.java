@@ -6,17 +6,23 @@ public class InsertData {
 //    public static void main(String[] args) {
     public static boolean insertData(String username, String password){
         int ctr = 0;
-        try(Connection c = MySQLConnection.getConnection();
-            PreparedStatement statement = c.prepareStatement(
-                     "INSERT INTO users (username, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ){
+        Connection c = null;
+        try {
 //            String name = "Nina";
 //            String email = "ninz@gmail.com";
+            c = MySQLConnection.getConnection();
+            c.setAutoCommit(false);
+            PreparedStatement statement = c.prepareStatement(
+                     "INSERT INTO users (username, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+
             statement.setString(1, username);
             statement.setString(2, password);
             ctr = statement.executeUpdate();
             System.out.println("Inserted " + ctr + " data successfully");
             ResultSet rs = statement.getGeneratedKeys();
+
+            c.commit();
+
             if (rs.next()) {
                 HelloApplication.current_uid = rs.getInt(1);
             }
@@ -24,24 +30,51 @@ public class InsertData {
 
         } catch (SQLException e){
             e.printStackTrace();
+            try {
+                c.rollback();
+            } catch (SQLException r){
+                r.printStackTrace();
+            }
+        } finally {
+            try {
+                c.close();
+            } catch (SQLException closeException) {
+                closeException.printStackTrace();
+            }
         }
         return (ctr > 0);
     }
 
     public static void addNote(String title, String contents){
-        try (
-            Connection c = MySQLConnection.getConnection();
+        Connection c = null;
+        try {
+            c = MySQLConnection.getConnection();
+            c.setAutoCommit(false);
+
             PreparedStatement ps = c.prepareStatement(
               "INSERT INTO notes (uid, title, contents) VALUES (?, ?, ?)"
             );
-        ){
+
             ps.setInt(1,HelloApplication.current_uid);
             ps.setString(2, title);
             ps.setString(3, contents);
             ps.executeUpdate();
 
+            c.commit();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
+//            try {
+//                c.rollback();
+//            } catch (SQLException ex) {
+//                throw new RuntimeException(ex);
+//            }
+        } finally {
+            try {
+                c.close();
+            } catch (SQLException closeException) {
+                closeException.printStackTrace();
+            }
         }
     }
 }

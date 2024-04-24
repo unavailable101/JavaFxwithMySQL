@@ -93,8 +93,8 @@ public class HomeController implements Initializable {
 //        username = (Label) home.getChildren().get(5);
         vbOutput.getChildren().clear();
         if (CreateTable.notesTable()) {
-            ResultSet yourNotes = ReadData.all_notes();
-            try {
+
+            try ( ResultSet yourNotes = ReadData.all_notes(); ) {
 //                VBox content = new VBox();
 //                Insets margin = new Insets(100);
 //                VBox.setMargin(content, margin);
@@ -157,12 +157,6 @@ public class HomeController implements Initializable {
 //                apYourNotes.getChildren().addAll(vbOutput);
             } catch (SQLException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    yourNotes.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             }
         }
     }

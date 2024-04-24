@@ -36,7 +36,10 @@ public class CreateTable {
     }
 
     public static void createNote(){
-        try (Connection c =  MySQLConnection.getConnection();) {
+        Connection c = null;
+        try {
+            c = MySQLConnection.getConnection();
+            c.setAutoCommit(false);
             String query =
                     "CREATE TABLE IF NOT EXISTS notes (" +
                     "uid INT," +
@@ -46,10 +49,17 @@ public class CreateTable {
                     "FOREIGN KEY (uid) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE)";
             Statement statement = c.createStatement();
             statement.execute(query);
+            c.commit();
 //            notesTable = true;
             System.out.println("Table 'notes' has been created successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                c.close();
+            } catch (SQLException closeException) {
+                closeException.printStackTrace();
+            }
         }
     }
 }
