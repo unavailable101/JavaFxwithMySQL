@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.csit228_f1_v2.Register">
+   <children>
+      <ImageView fitHeight="516.0" fitWidth="811.0" layoutX="-3.0" layoutY="-3.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../images/woodTable.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="258.0" layoutY="51.0" text="Sign-Up">
+         <font>
+            <Font name="Courier New Bold" size="60.0" />
+         </font></Label>
+      <ImageView fitHeight="419.0" fitWidth="683.0" layoutX="45.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../images/note-sticky-yellow-vector-graphic-pixabay-40.png" />
+         </image>
+      </ImageView>
+      <GridPane layoutX="209.0" layoutY="160.0" prefHeight="222.0" prefWidth="372.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="163.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="250.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" />
+          <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" />
+          <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" />
+            <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" />
+            <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" />
+        </rowConstraints>
+         <children>
+            <Label text="First Name: " textFill="#612302">
+               <font>
+                  <Font name="Comic Sans MS" size="16.0" />
+               </font></Label>
+            <Label text="Last Name: " textFill="#612302" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Comic Sans MS" size="16.0" />
+               </font></Label>
+            <Label text="Username: " textFill="#612302" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Comic Sans MS" size="16.0" />
+               </font></Label>
+            <Label text="Email: " textFill="#612302" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Comic Sans MS" size="16.0" />
+               </font></Label>
+            <TextField fx:id="tfFirstName" GridPane.columnIndex="1" />
+            <TextField fx:id="tfLastName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="tfEmail" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="tfPass" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label layoutX="103.0" layoutY="149.0" text="Password: " textFill="#612302" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Comic Sans MS" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tfUsername" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </GridPane>
+      <Button fx:id="btnSubmit" layoutX="340.0" layoutY="425.0" mnemonicParsing="false" onAction="#onSubmit" prefHeight="41.0" prefWidth="89.0" style="-fx-background-color: #3F2305;" text="Sign-Up" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <Label fx:id="lblKulang" layoutX="325.0" layoutY="380.0" text="*All fields are required" textFill="RED" visible="false" />
+   </children>
+</AnchorPane>

@@ -120,18 +120,19 @@ public class HelloApplication extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 System.out.println("Hello");
-                if (ReadData.getUsername(tfUsername.getText())){
-                    if (ReadData.getPassword(pfPassword.getText())){
-                        current_username = tfUsername.getText();
-                        System.out.println("Current user id to login: " + current_uid);
-                        pfPassword.clear();
-                        tmpPassword.clear();
-                        try {
-//                            Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
-                            FXMLLoader load = new FXMLLoader(getClass().getResource("homepage.fxml"));
-                            Parent p = load.load();
+                if ( CreateTable.usersTable() ){
+                    if (ReadData.getUsername(tfUsername.getText())) {
+                        if (ReadData.getPassword(pfPassword.getText())) {
+                            current_username = tfUsername.getText();
+                            System.out.println("Current user id to login: " + current_uid);
+                            pfPassword.clear();
+                            tmpPassword.clear();
+                            try {
+                            Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
+//                                FXMLLoader load = new FXMLLoader(getClass().getResource("homepage.fxml"));
+//                                Parent p = load.load();
 
-                            HomeController controller = load.getController();
+//                                HomeController controller = load.getController();
 //                            load.setController(controller);
 //                            HomeController forUname = new HomeController();
 //                            // Pass data to HomeController if needed
@@ -141,17 +142,20 @@ public class HelloApplication extends Application {
 //                            Label txt_username = (Label) ((AnchorPane) p).getChildren().get(5);
 //                            txt_username.setText(tfUsername.getText());
 //                            HomeController.txtUsername.setText(tfUsername.getText());
-                            Scene s = new Scene(p);
-                            stage.setScene(s);
-                            stage.show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                                Scene s = new Scene(p);
+                                stage.setScene(s);
+//                                stage.show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            System.out.println("I was also called! but wrong password huehue");
                         }
                     } else {
-                        System.out.println("I was also called! but wrong password huehue");
+                        System.out.println("I was called!\nUsername does not exists!");
                     }
                 } else {
-                    System.out.println("I was called!\nUsername does not exists!");
+                    System.out.println("way table dae");
                 }
             }
         });
@@ -159,18 +163,18 @@ public class HelloApplication extends Application {
         btnRegister.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println("hello");
-                CreateTable.createUser(); //create table if table does not exist
-                if (InsertData.insertData(tfUsername.getText(), pfPassword.getText())){
+//                System.out.println("hello");
+//                CreateTable.createUser(); //create table if table does not exist
+//                if (InsertData.insertData(tfUsername.getText(), pfPassword.getText())){
                     try {
-                        Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
+                        Parent p = FXMLLoader.load(getClass().getResource("register.fxml"));
                         Scene s = new Scene(p);
                         stage.setScene(s);
                         stage.show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
+//                }
 
             }
         });

@@ -1,9 +1,6 @@
 package com.example.csit228_f1_v2;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ReadData {
     //    public static void main(String[] args) {
@@ -119,5 +116,58 @@ public class ReadData {
 //            }
 //        }
         return null;
+    }
+
+    public static ResultSet userProfile(){
+        Connection c = null;
+        try{
+            c = MySQLConnection.getConnection();
+            c.setAutoCommit(false);
+            Statement s = c.createStatement();
+            String query = "SELECT firstName, lastName, email FROM users WHERE id="+HelloApplication.current_uid;
+            ResultSet res =  s.executeQuery(query);
+            c.commit();
+            return res;
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static String userFullName(){
+        try (
+            Connection c = MySQLConnection.getConnection();
+            PreparedStatement ps = c.prepareStatement("SELECT firstName, lastName, email FROM users WHERE id=?");
+        ) {
+            ps.setInt(1, HelloApplication.current_uid);
+            ResultSet res = ps.executeQuery();
+            if (res.next()){
+                return res.getString("firstName") + " " + res.getString("lastName");
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static int noteCount(){
+        if (CreateTable.notesTable()){
+            try (
+                    Connection c = MySQLConnection.getConnection();
+                    PreparedStatement ps = c.prepareStatement(
+                            "SELECT COUNT(uid) AS noteCount FROM notes WHERE uid=?"
+                    );
+            ) {
+                ps.setInt(1, HelloApplication.current_uid);
+                try (ResultSet res = ps.executeQuery()) {
+                    if (res.next()) return res.getInt("noteCount");
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return 0;
     }
 }

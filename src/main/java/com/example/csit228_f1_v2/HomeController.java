@@ -12,10 +12,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -54,6 +56,12 @@ public class HomeController implements Initializable {
     public Button btnSaveChanges;
     public Button btnClose_view;
     public Button btnDelete_view;
+    @FXML
+    public Label lblName;
+    @FXML
+    public Label lblEmail;
+    @FXML
+    public Label lblNotesCount;
 
 
 //    String currentUser;
@@ -92,12 +100,36 @@ public class HomeController implements Initializable {
         lblUsername.setText(HelloApplication.current_username);
 //        username = (Label) home.getChildren().get(5);
         vbOutput.getChildren().clear();
+        String name;
+        String email;
+
+
+        try (ResultSet currUser = ReadData.userProfile();){
+            if (currUser.next()){
+                name = currUser.getString("firstName") + " " + currUser.getString("lastName");
+                email = currUser.getString("email");
+                lblName.setText(name);
+                lblEmail.setText(email);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+//        lblName.setText(ReadData.userFullName());
+//        lblEmail.setText(null);
+        lblNotesCount.setText(String.valueOf(ReadData.noteCount()));
+
         if (CreateTable.notesTable()) {
 
-            try ( ResultSet yourNotes = ReadData.all_notes(); ) {
+            try (
+                    ResultSet yourNotes = ReadData.all_notes();
+            ) {
 //                VBox content = new VBox();
 //                Insets margin = new Insets(100);
 //                VBox.setMargin(content, margin);
+
+
+
+                //katu ning lists of created notes
                 while (yourNotes.next()) {
 //                System.out.println("Title: " + yourNotes.getString("title") + "\n" + "Content: " + yourNotes.getString("contents"));
                     int note_id = yourNotes.getInt("id");
@@ -105,12 +137,11 @@ public class HomeController implements Initializable {
                     String contents = yourNotes.getString("contents");
 
                     Label note_title = new Label(title);
-                    note_title.setPrefWidth(325);
+                    note_title.setPrefWidth(500);
                     Button view = new Button("View");
                     Button delete_note = new Button("Delete");
                     HBox hbox = new HBox(note_title, view, delete_note);
                     hbox.setSpacing(10);
-//                    HBox.setMargin(hbox, new Insets(5, 0, 5, 0));
                     vbOutput.getChildren().add(hbox);
                     vbOutput.setSpacing(5);
 
@@ -122,6 +153,7 @@ public class HomeController implements Initializable {
                             vbOutput.setVisible(false);
                             tfNoteTitle_view.setText(title);
                             taNoteContents_view.setText(contents);
+                            btnDeleteAllNotes.setVisible(false);
                             btnSaveChanges.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent actionEvent) {
@@ -154,6 +186,7 @@ public class HomeController implements Initializable {
                         }
                     });
                 }
+
 //                apYourNotes.getChildren().addAll(vbOutput);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -325,6 +358,7 @@ public class HomeController implements Initializable {
 
     public void onCloseViewNote() {
         apViewNotes.setVisible(false);
+        btnDeleteAllNotes.setVisible(true);
         vbOutput.setVisible(true);
     }
 }
