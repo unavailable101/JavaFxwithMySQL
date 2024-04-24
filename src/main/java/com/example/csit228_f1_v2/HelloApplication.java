@@ -35,35 +35,24 @@ public class HelloApplication extends Application {
     }
 
     public static void loginPage(Stage stage){
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-//        stage.setTitle("Hello!");
-//        stage.setScene(scene);
-
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         Text txtWelcome = new Text("Welcome Back!");
         txtWelcome.setFont(Font.font(69));
-//        txtWelcome.setFill(Color.RED);
-//        grid.setAlignment();
         grid.setPadding(new Insets(100));
-//        grid.
         txtWelcome.setTextAlignment(TextAlignment.CENTER);
         grid.add(txtWelcome, 0, 0, 3, 1);
 
         Label lbUsername = new Label("Username: ");
-//        lbUsername.setTextFill(Color.LIGHTSKYBLUE);
         lbUsername.setFont(Font.font(30));
         grid.add(lbUsername, 0, 1);
 
         TextField tfUsername = new TextField(); //textfield for username
         grid.add(tfUsername, 1, 1);
         tfUsername.setFont(Font.font(30));
-//        tfUsername.setMaxWidth(150);
 
         Label lbPassword = new Label("Password");
         lbPassword.setFont(Font.font(30));
-//        lbPassword.setTextFill(Color.CHARTREUSE);
         grid.add(lbPassword, 0, 2);
 
         PasswordField pfPassword = new PasswordField(); //textfield for password
@@ -76,18 +65,6 @@ public class HelloApplication extends Application {
         tmpPassword.setVisible(false);
 
         ToggleButton btnShow = new ToggleButton("( )");
-//        btnShow.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//                if (btnShow.isSelected()) {
-//                    tmpPassword.setText(pfPassword.getText());
-//                    tmpPassword.setVisible(true);
-//                } else {
-//                    tmpPassword.setVisible(false);
-//                    pfPassword.setText(tmpPassword.getText());
-//                }
-//            }
-//        });
         btnShow.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -128,23 +105,9 @@ public class HelloApplication extends Application {
                             pfPassword.clear();
                             tmpPassword.clear();
                             try {
-                            Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
-//                                FXMLLoader load = new FXMLLoader(getClass().getResource("homepage.fxml"));
-//                                Parent p = load.load();
-
-//                                HomeController controller = load.getController();
-//                            load.setController(controller);
-//                            HomeController forUname = new HomeController();
-//                            // Pass data to HomeController if needed
-////                            controller.setCurrentUser(uname);
-//                            forUname.setCurrentUser(uname);
-
-//                            Label txt_username = (Label) ((AnchorPane) p).getChildren().get(5);
-//                            txt_username.setText(tfUsername.getText());
-//                            HomeController.txtUsername.setText(tfUsername.getText());
+                                Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
                                 Scene s = new Scene(p);
                                 stage.setScene(s);
-//                                stage.show();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -163,21 +126,17 @@ public class HelloApplication extends Application {
         btnRegister.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-//                System.out.println("hello");
-//                CreateTable.createUser(); //create table if table does not exist
-//                if (InsertData.insertData(tfUsername.getText(), pfPassword.getText())){
-                    try {
-                        Parent p = FXMLLoader.load(getClass().getResource("register.fxml"));
-                        Scene s = new Scene(p);
-                        stage.setScene(s);
-                        stage.show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-//                }
-
+                try {
+                    Parent p = FXMLLoader.load(getClass().getResource("register.fxml"));
+                    Scene s = new Scene(p);
+                    stage.setScene(s);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
+        stage.setResizable(false);
         primaryStage = stage;
 
         Scene scene = new Scene(grid, 700, 500, Color.BLACK);

@@ -3,12 +3,11 @@ package com.example.csit228_f1_v2;
 import java.sql.*;
 
 public class CreateTable {
-//    public static void main(String[] args) {
     public static boolean notesTable(){
         try (Connection c = MySQLConnection.getConnection()) {
             DatabaseMetaData metaData = c.getMetaData();
             ResultSet resultSet = metaData.getTables(null, null, "notes", null);
-            return resultSet.next(); // If next() returns true, table exists
+            return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,7 +36,6 @@ public class CreateTable {
             c.setAutoCommit(false);
             Statement statement = c.createStatement();
             statement.execute(query);
-            System.out.println("Table 'users' has been created successfully!");
             c.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,8 +63,6 @@ public class CreateTable {
             Statement statement = c.createStatement();
             statement.execute(query);
             c.commit();
-//            notesTable = true;
-            System.out.println("Table 'notes' has been created successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

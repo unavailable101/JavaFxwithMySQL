@@ -28,33 +28,45 @@ import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
 
+    @FXML
     public ToggleButton tbNight;
-    public ProgressIndicator piProgress;
-    public Slider slSlider;
-    public ProgressBar pbProgress;
+    @FXML
     public Button logout;
+    @FXML
     public Button changePassword;
+    @FXML
     public Button tbChangeUsername;
     @FXML
-    public Label txtUsername;
     public AnchorPane home;
     @FXML
     public Label txtTitle; //di sha mu ila nimo huehue
+    @FXML
     public TextField tfNoteTitle;
+    @FXML
     public Button btnCreateNote;
+    @FXML
     public TextArea taNoteContents;
+    @FXML
     public Button deleteAccnt;
+    @FXML
     public AnchorPane apYourNotes;
     @FXML
     public Label lblUsername;
-    public Label username;
+    @FXML
     public Button btnDeleteAllNotes;
+    @FXML
     public VBox vbOutput;
+    @FXML
     public AnchorPane apViewNotes;
+    @FXML
     public TextField tfNoteTitle_view;
+    @FXML
     public TextArea taNoteContents_view;
+    @FXML
     public Button btnSaveChanges;
+    @FXML
     public Button btnClose_view;
+    @FXML
     public Button btnDelete_view;
     @FXML
     public Label lblName;
@@ -62,47 +74,17 @@ public class HomeController implements Initializable {
     public Label lblEmail;
     @FXML
     public Label lblNotesCount;
-
-
-//    String currentUser;
-//
-//    public void setCurrentUser(String username){
-//        currentUser = username;
-//    }
-
-
-//    public void onSliderChange() {
-//        double val = slSlider.getValue();
-//        System.out.println(val);
-//        piProgress.setProgress(val/100);
-//        pbProgress.setProgress(val/100);
-//        if (val == 100) {
-//            System.exit(0);
-//        }
-//    }
-
-//    @Override
-//    public void start(Stage stage) throws Exception {
-////        txtUsername.setText(ReadData.get_username());
-//        txtUsername.setText("testing");
-//    }
-
     protected URL loc;
     protected  ResourceBundle rsbundle;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("homepage.fxml"));
-//        loader.setController(this);
         loc = location;
         rsbundle = resources;
-//        lblUsername.setTextFill(Color.WHITE);
         lblUsername.setText(HelloApplication.current_username);
-//        username = (Label) home.getChildren().get(5);
         vbOutput.getChildren().clear();
         String name;
         String email;
-
 
         try (ResultSet currUser = ReadData.userProfile();){
             if (currUser.next()){
@@ -114,24 +96,13 @@ public class HomeController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        lblName.setText(ReadData.userFullName());
-//        lblEmail.setText(null);
         lblNotesCount.setText(String.valueOf(ReadData.noteCount()));
 
         if (CreateTable.notesTable()) {
-
             try (
                     ResultSet yourNotes = ReadData.all_notes();
             ) {
-//                VBox content = new VBox();
-//                Insets margin = new Insets(100);
-//                VBox.setMargin(content, margin);
-
-
-
-                //katu ning lists of created notes
                 while (yourNotes.next()) {
-//                System.out.println("Title: " + yourNotes.getString("title") + "\n" + "Content: " + yourNotes.getString("contents"));
                     int note_id = yourNotes.getInt("id");
                     String title = yourNotes.getString("title");
                     String contents = yourNotes.getString("contents");
@@ -171,8 +142,6 @@ public class HomeController implements Initializable {
                                     onCloseViewNote();
                                 }
                             });
-
-
                         }
                     });
 
@@ -180,14 +149,11 @@ public class HomeController implements Initializable {
                         @Override
                         public void handle(ActionEvent actionEvent) {
                             System.out.println("delete btn pressed! note_id: " + note_id);
-//                            DeleteData.deleteNote(note_id);
                             onDeleteNote(note_id);
                             initialize(loc, rsbundle);
                         }
                     });
                 }
-
-//                apYourNotes.getChildren().addAll(vbOutput);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -211,28 +177,12 @@ public class HomeController implements Initializable {
     public void onLogout(){
         System.out.println("Current user to logout: " + HelloApplication.current_uid);
         HelloApplication.current_uid = -1;
-
-//        FXMLLoader fxmlLoader = new FXMLLoader();
-//        fxmlLoader.setRoot(HelloApplication.primaryStage);
-//        Parent root = fxmlLoader.load();
-//
-//        Scene scene = new Scene(root);
-//        HelloApplication.primaryStage.setScene(scene);
-//        Stage currentStage = (Stage) home.getScene().getWindow();
-//        Scene currentScene = currentStage.getScene();
-////        currentStage.setScene(null);
-////        currentStage.setScene(HelloApplication.primaryStage.getScene());
-////        currentStage.show();
-//        currentScene.getWindow().hide();
-//        HelloApplication.loginPage(HelloApplication.primaryStage);
         HelloApplication.primaryStage.setScene(HelloApplication.primaryScene);
     }
 
     public void onChangePassword(){
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Changing Password");
-//        dialog.setHeaderText("Are you absolutely sure? This will delete all data present in the program.");
-//        dialog.setGraphic(new Circle(15, Color.RED)); // Custom graphic
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         VBox whole = new VBox();
@@ -267,22 +217,19 @@ public class HomeController implements Initializable {
             if (!result.get().equals(null)){
                 UpdateData.updatePassword(HelloApplication.current_uid, result.get());
             }
-//            System.out.println(result.get());
         }
     }
 
     public void onChangeUsername(){
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Changing Password");
-//        dialog.setHeaderText("Are you absolutely sure? This will delete all data present in the program.");
-//        dialog.setGraphic(new Circle(15, Color.RED)); // Custom graphic
+        dialog.setTitle("Changing Username");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         TextField newUsername = new TextField();
         HBox content = new HBox();
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(10);
-        content.getChildren().addAll(new Label("Enter your old password to confirm:"), newUsername);
+        content.getChildren().addAll(new Label("Enter your new username:"), newUsername);
 
         dialog.getDialogPane().setContent(content);
         dialog.setResultConverter(dialogButton -> {
@@ -299,20 +246,17 @@ public class HomeController implements Initializable {
                 HelloApplication.current_username = result.get();
                 initialize(loc, rsbundle);
             }
-//            System.out.println(result.get());
         }
     }
     public void onDeleteAccount(){
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Delete Account");
-//        dialog.setHeaderText("Are you absolutely sure? This will delete all data present in the program.");
-//        dialog.setGraphic(new Circle(15, Color.RED)); // Custom graphic
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         HBox content = new HBox();
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(10);
-        content.getChildren().addAll(new Label("Are you sure you want to delete your account? There is not turning back"));
+        content.getChildren().addAll(new Label("Are you sure you want to delete your account? There is no turning back"));
 
         dialog.getDialogPane().setContent(content);
         dialog.setResultConverter(dialogButton -> {
@@ -326,21 +270,13 @@ public class HomeController implements Initializable {
         if (result.isPresent()) {
             if (!result.get().equals(null)){
                 DeleteData.deleteAccount(HelloApplication.current_uid);
-
-//                Stage currentStage = (Stage) home.getScene().getWindow();
-//                Scene currentScene = currentStage.getScene();
-//                currentScene.getWindow().hide();
-//                HelloApplication.loginPage(HelloApplication.primaryStage);
                 HelloApplication.primaryStage.setScene(HelloApplication.primaryScene);
             }
-//            System.out.println(result.get());
         }
     }
 
     public void onCreateNote(ActionEvent actionEvent) {
-        System.out.println("hello");
-        System.out.println(tfNoteTitle.getText() +  "\n" + taNoteContents.getText());
-        CreateTable.createNote();
+        if ( !CreateTable.notesTable() ) CreateTable.createNote();
         InsertData.addNote(tfNoteTitle.getText(), taNoteContents.getText());
         tfNoteTitle.clear();
         taNoteContents.clear();

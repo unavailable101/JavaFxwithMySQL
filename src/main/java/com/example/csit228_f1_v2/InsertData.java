@@ -3,14 +3,11 @@ package com.example.csit228_f1_v2;
 import java.sql.*;
 
 public class InsertData {
-//    public static void main(String[] args) {
     public static boolean insertData(String firstName, String lastName, String username, String email, String password){
         int ctr = 0;
         if (!ReadData.getUsername(username)){
             Connection c = null;
             try {
-//            String name = "Nina";
-//            String email = "ninz@gmail.com";
                 c = MySQLConnection.getConnection();
                 c.setAutoCommit(false);
                 PreparedStatement statement = c.prepareStatement(
@@ -69,11 +66,6 @@ public class InsertData {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-//            try {
-//                c.rollback();
-//            } catch (SQLException ex) {
-//                throw new RuntimeException(ex);
-//            }
         } finally {
             try {
                 c.close();

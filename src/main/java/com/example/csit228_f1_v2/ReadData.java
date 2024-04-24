@@ -3,14 +3,6 @@ package com.example.csit228_f1_v2;
 import java.sql.*;
 
 public class ReadData {
-    //    public static void main(String[] args) {
-//    private static String username;
-//
-//    private static String password;
-//    public ReadData() {
-//        this.username = null;
-//        this.password = null;
-//    }
     private static String curr_username;
 
     public static boolean getUsername(String username) {
@@ -26,13 +18,10 @@ public class ReadData {
             c.commit();
             while (res.next()) {
                 int id = res.getInt("id");
-//                String username = res.getString("username");
-//                String password = res.getString("password");
                 if ( username.equals(res.getString("username"))) {
                     curr_username = res.getString("username");
                     return true;
                 }
-//                System.out.println("ID: " + id + "\t\tName: " + username + "\t\tEmail: " + password);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +37,6 @@ public class ReadData {
                 closeException.printStackTrace();
             }
         }
-//    }
         return false;
     }
 
@@ -65,15 +53,12 @@ public class ReadData {
             c.commit();
             while (res.next()) {
                 int id = res.getInt("id");
-//                String username = res.getString("username");
-//                String password = res.getString("password");
                 if (curr_username.equals(res.getString("username"))){
                     if (password.equals(res.getString("password"))) {
                         HelloApplication.current_uid = res.getInt("id");
                         return true;
                     }
                 }
-//                System.out.println("ID: " + id + "\t\tName: " + username + "\t\tEmail: " + password);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,7 +74,6 @@ public class ReadData {
                 closeException.printStackTrace();
             }
         }
-//    }
         return false;
     }
 
@@ -106,15 +90,6 @@ public class ReadData {
         } catch (SQLException e){
             e.printStackTrace();
         }
-//        finally {
-//            try{
-//                c.close();
-//                s.close();
-//                res.close();
-//            } catch (SQLException e){
-//                e.printStackTrace();
-//            }
-//        }
         return null;
     }
 

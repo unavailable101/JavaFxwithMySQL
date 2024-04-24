@@ -1,6 +1,7 @@
 package com.example.csit228_f1_v2;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,12 +13,19 @@ import java.io.IOException;
 
 public class Register {
 
+    @FXML
     public TextField tfFirstName;
+    @FXML
     public TextField tfLastName;
+    @FXML
     public TextField tfEmail;
+    @FXML
     public TextField tfPass;
+    @FXML
     public Button btnSubmit;
+    @FXML
     public Label lblKulang;
+    @FXML
     public TextField tfUsername;
 
     public void onSubmit(ActionEvent actionEvent) {
